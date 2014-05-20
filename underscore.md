@@ -1,4 +1,4 @@
-# Javsscript underscore vs Ruby #
+# Javascript underscore vs Ruby #
 
 本文 underscore 的示例参考了 http://www.css88.com/doc/underscore/.
 english version: http://underscorejs.org
