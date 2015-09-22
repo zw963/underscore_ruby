@@ -1,5 +1,8 @@
 # Coffee + underscore vs Ruby #
 
+Original base on http://www.css88.com/doc/underscore/.
+
+
 The fancy `coffeescript` and `underscore` is written by one author, so I think
 both should be work well together, this article try to compare the programming
 style about *underscore+coffeescript* with *Ruby* 
@@ -77,7 +80,7 @@ _.each object, puts
 # Equivalent
 
 _.each object, (value, key, object)->
-  puts(value, key, object)
+  puts value, key, object
   
 # => 1 one Object {one: 1, two: 2, three: 3}
 #    2 two Object {one: 1, two: 2, three: 3}
@@ -98,98 +101,92 @@ hash.each_pair {|key, value| print value, key, hash, "\n" }
 the arguments order is reverse between js function arguments and ruby block arguments.
 What cause this is ruby use parallel assignment semantic, [:one, 1] corresponding to [key, value].
 
-```coffee
-### Coffee ###
-ary = [{name: 'billy'}, {name: 'zw963'}, {name: 'wei.zheng'}]
-
-_.each ary, (element)->
-  puts element.name
-
-# => billy
-#    zw963
-#    wei.zheng
-``` 
-
-```ruby
-### Ruby ###
-ary = ['billy', 'zw963', 'wei.zheng']
-ary.each(&:upcase)  # ruby symbol magic
-
-# Equivalent
-
-ary.each {|e| e.upcase }
-
-# => ['BILLY', 'ZW963', 'WEI.ZHENG']
-```
-
 ## map
+
 ```coffee
 ### Coffee ###
+
 ary = [1.0, 2.3, 3]
-new_ary = _.map ary, Math.floor
-puts new_ary
+puts _.map ary, Math.floor
 
 # Equivalent
-new_ary = _.map ary, (value)-> Math.floor(value)
-puts new_ary
+
+puts _.map ary, (element)-> Math.floor(element)
 
 # => Array [1, 2, 3]
 ```
 
 ```ruby
 ### Ruby ###
+
 ary = [1.0, -2.3, 3]
-new_ary = ary.map {|element| element.floor }
+ary.map(&:floor)
 
 # Equivalent
 
-new_ary = ary.map(&:floor)
-# => [1, 2, 3]
+ary.map {|element| element.floor }
 
+# => [1, 2, 3]
+```
+
+## pluck/invoke
+
+```coffee
+### Coffee ###
+
+ary = [{name: 'billy', age: 30}, {name: 'zw963', age: 30}, {name: 'wei.zheng', age: 30}]
+puts _.pluck ary, 'name'
+
+# => Array ["moe", "larry", "curly"]
 ```
       
-   3. _.pluck(list, propertyName)
-      
-      ```js
-      var stooges = [{name: 'moe', age: 40}, {name: 'larry', age: 50}, {name: 'curly', age: 60}];
-      _.pluck(stooges, 'name')  // => ["moe", "larry", "curly"]
-      _.map(stooges, function (element, index, list) { return element.name });
-      ```
-      
-      ```ruby
-      Ruby:
-      stooges.map(&:size)  # => [2, 2, 2]
-      ```
-      
-   4. _.invoke(list, methodName, *arguments) , pluck 的增强版, 支持为 name 传递参数.
-      
-      ```ruby
-      Ruby:
-      stooges.map {|e| e.[](:name) }
-      stooges.map {|e| e[:name] }
-      ```
-      
-   5. _.reduce(list, iterator, memo) 或 inject(list, iterator, momo)
-      
-      ```js
-      _.reduce([1, 2, 3], function(memo, num){ return memo + num; }, 0); // => 6
-      ```
-      
-      ```ruby
-      Ruby:
-      [1, 2, 3].reduce(0) {|memo, num| memo + num }
-      ```
-      
-   6. _.reduceRight(list, iterator, memo) 从右侧开始 reduce.
-      
-      ```js
-      _.reduceRight([1, 2, 3], function(memo, num) { return memo << num; }, []) // => [3, 2, 1]
-      ```
-      
-      ```ruby
-      Ruby:
-      [1, 2, 3].reverse_each.reduce([]) {|memo, num| memo << num }
-      ```
+```ruby
+### Ruby ###
+
+ary = [{name: 'billy', age: 30}, {name: 'zw963', age: 30}, {name: 'wei.zheng', age: 30}]
+ary.map {|e| e[:name] }
+
+# Equivalent
+
+ary.map {|e| e.[](:name) }
+
+# => ["moe", "larry", "curly"]
+```
+
+## reduce/inject and reduceRight
+_.reduce(list, iterator, memo) 或 inject(list, iterator, momo)
+
+```coffee
+### Coffee ###
+
+ary = ['1', '2', '3']
+
+puts _.reduce ary, (memo, num)->
+  memo.concat num
+, ''
+
+# => 123
+
+puts _.reduceRight ary, (memo, num)->
+  memo.concat num
+, ''
+
+# => 321
+
+```
+
+```ruby
+### Ruby ###
+
+ary = ['1', '2', '3']
+ary.reduce('') {|memo, num| memo.concat num }
+
+# => '123'
+
+ary.reverse_each.reduce('') {|memo, num| memo.concat num }
+
+# => '321'
+```
       
    7. _.find(list, predicate)
 
