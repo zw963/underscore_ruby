@@ -1,13 +1,13 @@
-# Coffee + underscore vs Ruby #
+# Coffee+underscore vs Ruby
 
 Original base on http://www.css88.com/doc/underscore/.
 
 
-The fancy `coffeescript` and `underscore` is written by one author, so I think
+The fancy `coffeescript` and `underscore` is written by same one author, so I think
 both should be work well together, this article try to compare the programming
 style about *underscore+coffeescript* with *Ruby* 
 
-## Test Environment ##
+## Test Environment
 
 ### CoffeeScript + Underscore
 1. create `underscore_coffee.html`, with following content:
@@ -31,10 +31,10 @@ style about *underscore+coffeescript* with *Ruby*
 
 2. create `underscore_coffee.coffee`, the same folder as previous html file.
 ```coffee
-window.puts = (x...)->
+window.print = (x...)->
   console.log x...
 
-# Here is any coffee script written in this article
+# coffee insert here
 ```
 
 3. open html in your's browser, see console log output for result. (this article use Firefox 40)
@@ -42,45 +42,29 @@ window.puts = (x...)->
 ### Ruby
 install Ruby with your's favorite package manager, then run `irb` in terminal.
 
-## Iterator with a Array ##
+# Iterator with a Array/Object ##
+
+## _.each list, iterator
 
 ```coffee
-### Coffee ###
+### Coffee Code ###
 
-_.each [1, 2, 3], puts
+_.each [1, 2, 3], print
 
 # Equivalent
 
-_.each [1, 2, 3], (element, index, array)->
-  puts element, index, array
+_.each [1, 2, 3], (element, index, array)-> print element, index, array
 
 # => 1 0 Array [1,2,3]
 #    2 1 Array [1,2,3]
 #    3 2 Array [1,2,3]
-```
 
-```ruby
-### Ruby ###
-ary = [1, 2, 3]
-ary.each_with_index {|e, i| print e, i, ary, "\n" }
-
-# =>  10[1, 2, 3]
-#     21[1, 2, 3]
-#     32[1, 2, 3]
-```
-      
-## Iterator with a Object/Hash
-
-```coffee
-### Coffee ###
-object = one: 1, two: 2, three: 3
-
-_.each object, puts
+_.each {one: 1, two: 2, three: 3}, print
 
 # Equivalent
 
-_.each object, (value, key, object)->
-  puts value, key, object
+_.each {one: 1, two: 2, three: 3}, (value, key, object)->
+  print value, key, object
   
 # => 1 one Object {one: 1, two: 2, three: 3}
 #    2 two Object {one: 1, two: 2, three: 3}
@@ -88,60 +72,61 @@ _.each object, (value, key, object)->
 ```
 
 ```ruby
-### Ruby ###
-hash = {one: 1, two: 2, three: 3}
-hash.each_pair {|key, value| print value, key, hash, "\n" }
+### Ruby code ###
+[1, 2, 3].each_with_index {|e, i| print e, i, ary, "\n" }
+
+# =>  10[1, 2, 3]
+#     21[1, 2, 3]
+#     32[1, 2, 3]
+
+{one: 1, two: 2, three: 3}.each_pair {|key, value| print value, key, hash, "\n" }
 
 # => 1one{:one=>1, :two=>2, :three=>3}
 #    2two{:one=>1, :two=>2, :three=>3}
 #    3three{:one=>1, :two=>2, :three=>3}
 ```
 
-**Notice**,
+**Notice**
 the arguments order is reverse between js function arguments and ruby block arguments.
 What cause this is ruby use parallel assignment semantic, [:one, 1] corresponding to [key, value].
 
-## map
+## _.map list, iterator
 
 ```coffee
-### Coffee ###
+### Coffee Code ###
+print _.map [1.0, 2.3, 3], (element)-> Math.cos(element)
+# => Array [ 0.5403023058681398, -0.6662760212798241, -0.9899924966004454 ]
+# Equivalent usage
+print _.map [1.0, 2.3, 3], Math.cos
 
-ary = [1.0, 2.3, 3]
-puts _.map ary, Math.floor
-
-# Equivalent
-
-puts _.map ary, (element)-> Math.floor(element)
-
-# => Array [1, 2, 3]
+print _.map ['XXX', 'YYY', 'XXXX', 'XXXXX'], (e)-> e.length # => [3, 3, 4, 5]
+# Equivalent usage
+print _.map ['XXX', 'YYY', 'XXXX', 'XXXXX'], 'length'
 ```
 
 ```ruby
-### Ruby ###
+### Ruby code ###
+ary.map {|x| Math.cos(x) } # => [0.5403023058681398, -0.6662760212798241, -0.9899924966004454]
+# No Equivalent usage
 
-ary = [1.0, -2.3, 3]
-ary.map(&:floor)
-
-# Equivalent
-
-ary.map {|element| element.floor }
-
-# => [1, 2, 3]
+['XXX', 'YYY', 'XXXX', 'XXXXX'].map {|e| e.length } # => [3, 3, 4, 5]
+# Equivalent usage
+['XXX', 'YYY', 'XXXX', 'XXXXX'].map(&:length)
 ```
 
-## pluck/invoke
+## pluck
 
 ```coffee
-### Coffee ###
+### Coffee Code ###
 
 ary = [{name: 'billy', age: 30}, {name: 'zw963', age: 30}, {name: 'wei.zheng', age: 30}]
-puts _.pluck ary, 'name'
+print _.pluck ary, 'name'
 
 # => Array ["moe", "larry", "curly"]
 ```
       
 ```ruby
-### Ruby ###
+### Ruby code ###
 
 ary = [{name: 'billy', age: 30}, {name: 'zw963', age: 30}, {name: 'wei.zheng', age: 30}]
 ary.map {|e| e[:name] }
@@ -154,20 +139,20 @@ ary.map {|e| e.[](:name) }
 ```
 
 ## reduce/inject and reduceRight
-_.reduce(list, iterator, memo) 或 inject(list, iterator, momo)
+_.reduce(list, iterator, memo) or inject(list, iterator, momo)
 
 ```coffee
-### Coffee ###
+### Coffee Code ###
 
 ary = ['1', '2', '3']
 
-puts _.reduce ary, (memo, num)->
+print _.reduce ary, (memo, num)->
   memo.concat num
 , ''
 
 # => 123
 
-puts _.reduceRight ary, (memo, num)->
+print _.reduceRight ary, (memo, num)->
   memo.concat num
 , ''
 
@@ -176,7 +161,7 @@ puts _.reduceRight ary, (memo, num)->
 ```
 
 ```ruby
-### Ruby ###
+### Ruby code ###
 
 ary = ['1', '2', '3']
 ary.reduce('') {|memo, num| memo.concat num }
@@ -187,368 +172,397 @@ ary.reverse_each.reduce('') {|memo, num| memo.concat num }
 
 # => '321'
 ```
-      
-   7. _.find(list, predicate)
 
-      ```js
-      _.find([1, 2, 3, 4, 5, 6], function(num) { return num % 2 == 0; }); // => 2
-      ```
-      
-      ```ruby
-      Ruby:
-      [1, 2, 3, 4, 5, 6].find {|e| e % 2 == 0 }
-      ```
-      
-   8. _.filter(list, predicate) 或 select(list, predicate)
-      
-      ```js
-      _.filter([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; }); // => [2, 4, 6]
-      ```
-      
-      ```ruby
-      [1, 2, 3, 4, 5, 6].select {|e| e % 2 == 0 } # 别名 find_all
-      ```
-      
-   9. _.reject(list, predicate)
-      
-      ```js
-      _.reject([1, 2, 3, 4, 5, 6], function(num) { return num % 2 == 0; }) // => [1, 3, 5]
-      ```
-      
-      ```ruby
-      Ruby:
-      [1, 2, 3, 4, 5, 6].reject {|num| num % 2 == 0; }
-      ```
-      
-   10. _.every/some(list, [predicate])  对应于 Ruby 的 all?/any?
-       
-       ```js
-       _.every([true, 1, null, 'yes']) // => false
-       _.every([true, 1, 'yes']) // => true
-       ```
-       
-       ```ruby
-       Ruby:
-       [true, 1, nil, 'yes'].all?
-       [true, 1, nil, 'yes'].all? {|e| e }
-       ```
-       
-   11. _.contains(list, value) 或 _.include(list, value)
-       
-       ```js
-       _.contains([1, 2, 3], 3); // => true
-       ```
-       
-       ```ruby
-       Ruby:
-       [1, 2, 3].include? 3
-       ```
-       
-   12. _.max/min/uniq(list, [iterator], [context]) 
-        
-       ```js
-       _.max([1, 2, 3, 4, 5, 6]); // => 6
-       _.max([1, 2, 3, 4, 5, 6], function(num){ return Math.sin(num); }); // => 2
-       _.max([1, 2, 3, 4, 5, 6], Math.sin); // 简写形式
-       ```
-       
-       ```ruby
-       Ruby:
-       [1, 2, 3, 4, 5, 6].max
-       [1, 2, 3, 4, 5, 6].max {|e| Math.sin(e) }
-       ```
-       Ruby 不支持 js 样式的简写形式, 但是 Ruby 有神奇的: ``[1, 2, 3, 4, 5, 6].max(&:abs)``
+## _.find(list, predicate)
+Find the first element match predicate.
 
-   13. _.sortBy/groupBy(list, iterator)
-   
-       ```js
-       _.sortBy([1, 2, 3, 4, 5, 6], Math.sin)
-       _.sortBy([1, 2, 3, 4, 5, 6], function(num){ return Math.sin(num); }); // => [5, 4, 6, 3, 1, 2]
-       ```
-        
-       ```ruby
-       Ruby:
-       [1, 2, 3, 4, 5, 6].sort_by {|num| Math.sin(num) }
-       ```
+```coffee
+### Coffee code ###
 
-   14. _.indexBy 类似于 groupBy, 只不过适用于返回的结果只有一个元素时, 自动去除 [].
-       
-       ```js
-       _.groupBy(['XXX', 'XXXX', 'XXXXX'], 'length'); // => { 3:["XXX"], 4:["XXXX"], 5:["XXXXX"] }
-       _.indexBy(['XXX', 'XXXX', 'XXXXX'], 'length'); // => { 3: "XXX", 4: "XXXX", 5: "XXXXX" }
-       ```
-       
-       ```ruby
-       Ruby:
-       group_by {|x| ...}.map {|k, v| [k, *v] }
-       group_by {|x| ...}.map {|k, v| [k, v.first] }
-       ```
+ary = [1, 2, 3, 4, 5, 6]
+print _.find ary, (e)-> e % 2 == 0
 
-   15. _.countBy, 类似于 groupBy, 但是不返回元素, 而是返回元素的个数.
-       
-       ```js
-       _.countBy([1, 2, 3, 4, 5], function(num) {  return num % 2 == 0 ? 'even': 'odd'; }); 
-       // => {odd: 3, even: 2}
-       ```
-       
-       ```ruby
-       Ruby:
-       group_by {|x| ...}.map {|k, v.count] }
-       ```
-       
-   16. _.shuffle(list), 随机洗牌
-       
-       ```js
-       _.shuffle([1, 2, 3, 4, 5, 6]); // => [2, 4, 6, 5, 1, 3]
-       ```
-       
-       ```ruby
-       [1, 2, 3, 4, 5, 6].shuffle
-       ```
-       
-   17. _.sample(list, [n]), 随机选取 n 个元素
-       
-       ```js
-       _.sample([1, 2, 3, 4, 5, 6], 3) // => [2, 4, 5]
-       ```
-        
-       ```ruby
-       Ruby:
-       [1, 2, 3, 4, 5, 6].sample(3)
-       ```
-       
-   18. _.size(list)
-      
-      ```js
-      _.size({one: 1, two: 2, three: 3}) // => 3
-      ```
-      
-      ```ruby
-      Ruby:
-      {one: 1, two: 2, three: 3}.size
-      ```
-      
-   19. _.partition(array, predicate)
-       
-       ```js
-       function isOdd(num) { return num % 2;}
-       _.partition([0, 1, 2, 3, 4, 5], isOdd);
-       ```
-       
-       ```ruby
-       Ruby:
-       [0, 1, 2, 3, 4, 5].partition {|e| e.odd? } 或 [0, 1, 2, 3, 4, 5].partition(&:odd?)
-       ```
-       
-   20. _.where(list, properties) 返回 list 中, 包含 properties (子对象) 的对象数组.
-       findWhere 仅仅返回第一个值. 这是 js 特有的方法. Ruby 下貌似没太大用途, 这里不实现了.
-       
-   21. _.toArray(list)
-       
-       ```js
-       _.toArray(arguments), // => 转换任意可枚举对象为数组. 操作 arguments 时特别有用. 
-       ```
-       
-       ```ruby
-       Ruby:
-       (1..10).to_a
-       ```
-       
-## 数组方法 ##
-   1. _.first/last(array, [n])
-      
-      ```js
-      _.first([5, 4, 3, 2, 1], 2) // => [5, 4]
-      _.first([5, 4, 3, 2, 1], 2) // => [2, 1]
-      ```
-      
-      ```ruby
-      Ruby:
-      [5, 4, 3, 2, 1].first(2)
-      [5, 4, 3, 2, 1].last(2)
-      ```
+# => 2
+```
 
-   2. _.initial(array, [n]), 返回抛除 n 个元素后的数组.
-      
-      ```js
-      _.initial([5, 4, 3, 2, 1], 2) // [5, 4, 3]
-      ```
-      
-      ```ruby
-      Ruby:
-      [1, 2, 3, 4][0...-2]
-      [1, 2, 3, 4].drop(2)
-      ```
-      
-   3. _.rest(array, [index]) 
-      
-      ```js
-      _.rest([5, 4, 3, 2, 1], 2);
-      ```
-      
-      ```ruby
-      Ruby:
-      [1, 2, 3, 4][2..-1]
-      ```
-      
-   4. compact_.compact(array), 移除所有 `非真的元素'.
-     
-      ```js
-      _.compact([0, 1, false, 2, '', 3]);  # => [1, 2, 3]
-      ```
-      
-      ```ruby
-      [0, false, '', nil].compact  # => [0, false, ''] 仅仅移除 nil.
-      require 'active_support/all'
-      [0, 1, false, 2, '', 3].reject {|x| x.blank? or x == 0 } # => [1, 2, 3]
-      ```
-      
-   5. _.flatten(array, [shallow])
-      
-      ```js
-      _.flatten([1, [2], [3, [4, 5], 6]]) // => [1, 2, 3, 4, 5, 6]
-      _.flatten([1, [2], [3, [4, 5], 6]], 1) // => [1, 2, 3, [4, 5], 6]
-      ```
-      
-      ```Ruby
-      Ruby:
-      [1, [2], [3, [4, 5], 6]].flatten
-      [1, [2], [3, [4, 5], 6].flatten(1)
-      ```
-      
-   6. _.without(array, *values)
-      
-      ```js
-     _.without([1, 2, 1, 0, 3, 1, 4], 0, 1);  // => [2, 3, 4]
-     ```
-     
-      ```ruby
-      Ruby:
-      [1, 2, 1, 0, 3, 1, 4].reject {|x| x == 1 or x == 0 } # => [2, 3, 4]
-      ```
-      
-   7. _.union(*arrays)
-      
-      ```js
-      _.union([1, 2, 3], [101, 2, 1, 10]) // => [1, 2, 3, 101, 10]
-      ```
-      
-      ```ruby
-      Ruby:
-      [1, 2, 3] | [101, 2, 1, 10]
-      ```
-      
-   8. _.intersection(*arrays)
-      
-      ```js
-      _.intersection([1, 2, 3], [101, 2, 1, 10]) // => [1, 2]
-      ```
-      
-      ```ruby
-      Ruby:
-      [1, 2, 3] & [101, 2, 1, 10]
-      ```
-      
-   9. _.difference(array, *others)
-      
-      ```js
-      _.difference([1, 2, 3, 4, 5], [5, 2, 10]); // => [1, 3, 4]
-      ```
-      
-      ```ruby
-      Ruby:
-      [1, 2, 3, 4, 5] - [5, 2, 10]
-      ```
-       
-   10. _.zip(*arrays)
-       
-       ```js
-       _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false])
-       // => [
-       //     ["moe", 30, true], 
-       //     ["larry", 40, false], 
-       //     ["curly", 50, false]
-       //    ]
-       ```
-       
-       ```ruby
-       Ruby:
-       ['moe', 'larry', 'curly'].zip([30, 40, 50], [true, false, false])
-       ```
-       
-   11. _.object(list, [values]), 转化 values 到 js 对象形式, js 特有的方法.
-       
-       ```js
-       _.object(['moe', 'larry', 'curly'], [30, 40, 50]); // => {moe: 30, larry: 40, curly: 50}
-       _.object([['moe', 30], ['larry', 40], ['curly', 50]]); // => {moe: 30, larry: 40, curly: 50}
-       ```
-       
-       ```ruby
-       Ruby: 
-       x = ['moe', 'larry', 'curly'].zip[30, 40, 50]  # => [['moe', 30], ['larry', 40], ['curly', 50]]
-       
-       Hash[x]      # => {moe: 30, larry: 40, curly: 50}
-       Hash[y]      # => {moe: 30, larry: 40, curly: 50}
-       ```
-       
-   12. _.indexOf/lastIndexOf(array, value), 返回 value 在 array 中的索引, 不存在返回 -1.
-       
-       ```js
-       _.indexOf([1, 2, 3, 1, 2, 3], 2); // => 1 从左往右第一个值为 2 的元素索引.
-       _.lastIndexOf([1, 2, 3, 1, 2, 3], 2) // => 4 从右往左第一个值为 2 的元素索引.
-       ```
-       
-       ```ruby
-       Ruby: (不存在会返回 nil)
-       [1, 2, 3, 1, 2, 3].index(2)      # => 1
-       [1, 2, 3, 1, 2, 3].rindex(2)     # => 4
-       ```
+```ruby
+### Ruby code ###
 
-   13. _.range([start], stop, [step])
-       
-       ```js
-       _.range(0, 30, 5); // => [0, 5, 10, 15, 20, 25]
-       ```
-       
-       ```ruby
-       (0..30).step(5)
-       ```
-   
-   14. _.sortedIndex(list, value, [iterator], [context]), 返回参数插入 `排序后的数组' 时, 应该被插入的索引位置.
-       
-       ```js
-       _.sortedIndex([10, 20, 30, 40, 50], 35); // => 3
-       ```
-       
-       Ruby 版: 没有对应实现, 可以自己写一个:
-       ```ruby
-       Ruby:
-       class Array
-         def sortedIndex(num)
-           if block_given?
-             array = map(&proc).sort
-           else
-             array = self
-           end
+[1, 2, 3, 4, 5, 6].find {|e| e % 2 == 0 }
 
-           array.each_index do |index|
-             return index if num.between?(array[index-1], array[index])
-           end
-           nil
-         end
-       end
+# => 2
+```
+
+## _.filter/select(list, predicate) _.reject(list, predicate)
+```coffee
+### Coffee code ###
+
+ary = [1, 2, 3, 4, 5, 6]
+
+print _.filter ary, (e)-> e % 2 == 0
+
+# => Array [2, 4, 6]
+
+print _.reject ary, (e) -> e % 2 == 0
+
+# => Array [1, 3, 5]
+```
+
+```ruby
+### Ruby code ###
+
+[1, 2, 3, 4, 5, 6].select {|e| e % 2 == 0 } # => [2, 4, 6], alias find_all
+[1, 2, 3, 4, 5, 6].reject {|e| e % 2 == 0 } # => [1, 3, 5]
+```
+
+## _.every(list, [predicate])
+When predicate is omit, predicate all element is non-nil, else use predicate.
+
+```coffee
+### Coffee code ###
+
+print _.every [true, 1, null] # => false
+print _.every [true, 1, 'null'] # => true
+print _.every [0, false, "", null, undefined, NaN], (e)-> !e # => true
+```
+
+```ruby
+### Ruby code ###
+
+["", 0].all? # => true
+[nil, false].all? {|e| !e } # => true
+```
+
+## _.some(list, [predicate]) _.every(list, [predicate])
+some: When predicate is omit, predicate at least one element is non-nil, else use predicate.
+every: predicate all element is non-nil.
+```coffee
+### Coffee code ###
+
+print _.some [true, 1, null] # => true
+print _.every [true, 1, 'null'] # => true
+print _.every [0, false, "", null, undefined, NaN], (e)-> !e # => true
+```
+
+```ruby
+### Ruby code ###
+
+["", 0].all? # => true
+[nil, false].all? {|e| !e } # => true
+```
+
+## _.include/contains(list, value) 
+```coffee
+### Coffee code ###
+
+print _.include [1, 2, 3],  3 # => true
+```
+
+```ruby
+### Ruby code ###
+
+[1, 2, 3].include? 3 # => true
+```
+
+## _.max(list, [iterator], [context]) _.min(list, [iterator], [context]) _.uniq(list, [iterator], [context]) 
+```coffee
+### Coffee code ###
+
+print _.max [1, 2, 3, 4, 5, 6] # => 6
+print _.min [1, 2, 3, 4, 5, 6] # => 1
+print _.max [1, 2, 3, 4, 5, 6], (num)-> Math.sin(num) # => 2
+print _.max [1, 2, 3, 4, 5, 6], Math.sin # => 2
+print _.uniq [1, 1, 2, 3, 3] # => [1, 2, 3]
+print _.uniq [1, -1, 2, -2, 3], Math.abs # => [1, 2, 3]
+```
+
+```ruby
+### Ruby code ###
+
+[1, 2, 3, 4, 5, 6].max # => 6
+[1, 2, 3, 4, 5, 6].min # => 1
+[1, 2, 3, 4, 5, 6].max {|e| Math.sin(e) } # => 4
+[1, 2, 3, 4, -5, -6].max(&:abs) # => 6
+[1, 1, 2, 3, 3].uniq # => [1, 2, 3]
+[1, -1, 2, -2, 3].uniq {|x| x.abs } # => [1, 2, 3]
+```
+
+## _.sortBy(list, iterator)
+Use a iterator as sort strategy, return sorted list.
+```coffee
+### Coffee code ###
+
+print _.sortBy [1, 2, 3, 4, 5, 6], Math.sin # => [5, 4, 6, 3, 1, 2]
+```
+
+```ruby
+### Ruby code ###
+[1, 2, 3, 4, 5, 6].sort_by {|e| Match.sin(e) }
+```
+
+## _.groupBy/indexBy(list, predicate) countBy(list, predicate)
+use a iterator as group strategy, return a grouped object, key is return value, value is grouped element list.
+indexBy: key is return value, value is grouped element list last element.
+```coffee
+### Coffee code ###
+
+print _.groupBy(['XXX', 'YYY', 'XXXX', 'XXXXX'], 'length'); # => { 3:["XXX", "YYY"], 4:["XXXX"], 5:["XXXXX"] }
+print _.indexBy(['XXX', 'YYY', 'XXXX', 'XXXXX']), 'length') # => { 3:"YYY", 4:"XXXX", 5:"XXXXX" }
+print _.countBy(['XXX', 'YYY', 'XXXX', 'XXXXX']), 'length') # => { 3:2, 4:1, 5:1 }
+
+```
+
+```ruby
+### Ruby code ###
+['XXX', 'YYY', 'XXXX', 'XXXXX'].group_by(&:length) # => {3=>["XXX", "YYY"], 4=>["XXXX"], 5=>["XXXXX"]}
+['XXX', 'YYY', 'XXXX', 'XXXXX'].group_by(&:length).map {|k, v| [k,v.last] }.to_h # => {3=>"YYY", 4=>"XXXX", 5=>"XXXXX"}
+['XXX', 'YYY', 'XXXX', 'XXXXX'].group_by(&:length).map {|k, v| [k,v.length] }.to_h # => {3=>2, 4=>1, 5=>1}
+```
+
+## _.partition(list, predicate)
+paritition a list to two part.
+```coffee
+### Coffee code ###
+print _.partition [0, 1, 2, 3, 4, 5], (num)-> num % 2 # => [[1, 3, 5], [0, 2, 4]]
+```
+
+```ruby
+### Ruby code ###
+[0, 1, 2, 3, 4, 5].partition {|e| e % 2 != 0 } # => [[1, 3, 5], [0, 2, 4]]
+# Equivalent usage
+[0, 1, 2, 3, 4, 5].partition(&:odd?)
+```
        
-       p [-60, 20, 30, 40, 50].sortedIndex(35)  # => 3
-       p [-60, 20, 30, 40, 50].sortedIndex(35) {|x| x.abs }# => 2
-       p [-60, 20, 30, 40, 50].sortedIndex(35) {|x| x * x }# => nil
-       ```
+## _.shuffle(list) _.sample(list, [n])
+```coffee
+### Coffee code ###
+print _.shuffle [1, 2, 3, 4, 5, 6] # => [2, 4, 6, 5, 1, 3]
+print _.sample [1, 2, 3, 4, 5, 6] # => 4
+print _.sample [1, 2, 3, 4, 5, 6] # => 1
+print _.sample [1, 2, 3, 4], 2 # => [3, 5]
+```
+
+```ruby
+### Ruby code ###
+[1, 2, 3, 4, 5, 6].shuffle # => [2, 5, 1, 3, 6, 4]
+[1, 2, 3, 4, 5, 6].sample # => 1
+[1, 2, 3, 4, 5, 6].sample(2) # => [4, 2]
+```
+
+## _.size(list)
+```coffee
+### Coffee code ###
+print _.size [1, 2, 3, 4, 5, 6] # => 6
+print _.size {a:100, b:200} # => 2
+```
+
+```ruby
+### Ruby code ###
+[1, 2, 3, 4, 5, 6].size # => 6
+{a:100, b:200}.size # => 2
+```
+
+## _.where/findWhere(list, properties)
+```coffee
+### Coffee code ###
+print _.where [{a:100, b:200}, {c:300, d:400}, {e:500, a:100}], {a: 100} # => [{a:100, b:200}, {e:500, a:100}]
+# findWhere get the first element.
+print _.findWhere [{a:100, b:200}, {c:300, d:400}, {e:500, a: 100}], {a: 100} # => [{a:100, b:200}]
+```
+
+```ruby
+### Ruby code ###
+No implement yet.
+```
+
+## _.toArray(list)
+```coffee
+### Coffee code ###
+print _.toArray(arguments)
+```
+
+```ruby
+### Ruby code ###
+(1..10).to_a
+```
+
+# Iterator with a Array only (Object is not supported)
+
+## _.first(list, [n]) _.last(list, [n])
+```coffee
+### Coffee code ###
+print _.first [5, 4, 3, 2, 1], 2 # => [5, 4]
+print _.last [5, 4, 3, 2, 1], 2 # => [2, 1]
+```
+
+```ruby
+### Ruby code ###
+[5, 4, 3, 2, 1].first(2)
+[5, 4, 3, 2, 1].last(2)
+```
+
+## _.initial(list, [n])
+```coffee
+### Coffee code ###
+print _.initial [5, 4, 3, 2, 1], 2 # => [5, 4, 3]
+```
+
+```ruby
+### Ruby code ###
+[5, 4, 3, 2, 1][0...-2] # => [5, 4, 3]
+```
+
+## _.rest(list, [n])
+```coffee
+### Coffee code ###
+print _.rest [5, 4, 3, 2, 1], 2 # => [3, 2, 1]
+```
+
+```ruby
+### Ruby code ###
+[5, 4, 3, 2, 1].drop(2) # => [3, 2, 1]
+[5, 4, 3, 2, 1][2..-1] # => [3, 2, 1]
+```
+
+## _.compact(list)
+```coffee
+### Coffee code ###
+print _.compact [0, 1, false, 2, '', 3];  # => [1, 2, 3]
+```
+
+```ruby
+### Ruby code ###
+[0, false, '', nil].compact  # => [0, false, ''] # only remove nil
+
+## following is same behavior with _.compact.
+require 'active_support/all'
+[0, 1, false, 2, '', 3].reject {|x| x.blank? or x == 0 } # => [1, 2, 3]
+```
+
+## _.flatten(list, [shallow])
+```coffee
+### Coffee code ###
+print _.flatten [1, [2], [3, [4, 5], 6]] # => [1, 2, 3, 4, 5, 6]
+print _.flatten [1, [2], [3, [4, 5], 6]], 1 # => [1, 2, 3, [4, 5], 6]
+```
+
+```ruby
+### Ruby code ###
+[1, [2], [3, [4, 5], 6]].flatten # => [1, 2, 3, 4, 5, 6]
+[1, [2], [3, [4, 5], 6].flatten(1) # => [1, 2, 3, [4, 5], 6]
+```
+
+## _.without(list, [shallow])
+```coffee
+### Coffee code ###
+print _.without [1, 2, 1, 0, 3, 1, 4], 0, 1  # => [2, 3, 4]
+```
+
+```ruby
+### Ruby code ###
+ary = [1, 2, 1, 0, 3, 1, 4]
+ary.delete(0)
+ary.delete(1)
+ary # => [2, 3, 4]
+
+# Or
+ary.reject {|x| [0, 1].include? x } # => [2, 3, 4]
+```
+
+## _.union(*arrays) _.intersection(*arrays) _difference(array, *other_arrays)
+```coffee
+### Coffee code ###
+print _.union [1, 2, 3], [101, 2, 1, 10] # => [1, 2, 3, 101, 10]
+print _.intersection [1, 2, 3], [101, 2, 1, 10] # => [1, 2]
+print _.difference [1, 2, 3, 4, 5], [5, 2, 10] # => [1, 3, 4]
+```
+
+```ruby
+### Ruby code ###
+[1, 2, 3] | [101, 2, 1, 10] # => [1, 2, 3, 101, 10]
+[1, 2, 3] & [101, 2, 1, 10] # => [1, 2]
+[1, 2, 3, 4, 5] - [5, 2, 10] # => [1, 3, 4]
+```
+
+## _.zip(*arrays) _.object(array1, array2)
+```coffee
+### Coffee code ###
+print _.zip ['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]
+# => Array [Array["moe", 30, true], Array["larry", 40, false], Array["curly", 50, false]]
+
+print _.object ['moe', 'larry', 'curly'], [30, 40, 50]
+# => {moe: 30, larry: 40, curly: 50}
+```
+
+```ruby
+### Ruby code ###
+['moe', 'larry', 'curly'].zip [30, 40, 50], [true, false, false]
+# => [["moe", 30, true], ["larry", 40, false], ["curly", 50, false]]
+
+['moe', 'larry', 'curly'].zip([30, 40, 50]).to_h
+# => {moe: 30, larry: 40, curly: 50}
+```
+
+## _.indexOf(array, value) _.lastIndexOf(array, value)
+```coffee
+### Coffee code ###
+print _.indexOf [1, 2, 3, 1, 2, 3], 2; # => 1, return -1 if not exist.
+print _.lastIndexOf [1, 2, 3, 1, 2, 3], 2 # => 4, from right to left.
+```
+
+```ruby
+### Ruby code ###
+[1, 2, 3, 1, 2, 3].index(2)      # => 1, return nil if not exist.
+[1, 2, 3, 1, 2, 3].rindex(2)     # => 4
+```
+
+## _.range([start], stop, [step])
+```coffee
+### Coffee code ###
+print _.range 0, 30, 5 # => [0, 5, 10, 15, 20, 25]
+```
+
+```ruby
+### Ruby code ###
+(0..30).step(5)
+```
+
+## _.sortedIndex(sorted_list, value, [iterator], [context])
+return the index which value should be insert into.
+       
+```coffee
+### Coffee code ###
+_.sortedIndex [10, 20, 30, 40, 50], 35 # => 3
+```
+       
+```ruby
+### Ruby code ###
+class Array
+  def sortedIndex(num)
+    if block_given?
+      array = map(&proc).sort
+    else
+      array = self
+    end
+
+    array.each_index do |index|
+      return index if num.between?(array[index-1], array[index])
+    end
+    nil
+  end
+end
+
+p [-60, 20, 30, 40, 50].sortedIndex(35)  # => 3
+p [-60, 20, 30, 40, 50].sortedIndex(35) {|x| x.abs }# => 2
+p [-60, 20, 30, 40, 50].sortedIndex(35) {|x| x * x }# => nil
+```
        
 ## js 对象函数与 Ruby 哈希函数. ##
 
    1. _.keys(object) 
       
       ```js
-      _.keys({one: 1, two: 2}); // => ["one", "two"]
+      _.keys({one: 1, two: 2}); # => ["one", "two"]
       ```
       
       ```ruby
@@ -559,7 +573,7 @@ ary.reverse_each.reduce('') {|memo, num| memo.concat num }
    2. _.values(object) 
       
       ```js
-      _.values({one: 1, two: 2});  // => [1, 2]
+      _.values({one: 1, two: 2});  # => [1, 2]
       ```
       
       ```ruby
@@ -570,7 +584,7 @@ ary.reverse_each.reduce('') {|memo, num| memo.concat num }
    3. _.pairs(object)
       
       ```js
-      _.pairs({one: 1, two: 2}); // => [["one", 1], ["two", 2]]
+      _.pairs({one: 1, two: 2}); # => [["one", 1], ["two", 2]]
       ```
       
       ```ruby
@@ -581,7 +595,7 @@ ary.reverse_each.reduce('') {|memo, num| memo.concat num }
    4. _.invert(object), 翻转
       
       ```js
-      _.invert({Moe: "Moses", Larry: "Louis"}); // => {Moses: "Moe", Louis: "Larry"}
+      _.invert({Moe: "Moses", Larry: "Louis"}); # => {Moses: "Moe", Louis: "Larry"}
       ```
       
       ```ruby
@@ -592,20 +606,20 @@ ary.reverse_each.reduce('') {|memo, num| memo.concat num }
       
       ```js
       _.functions(_); 
-      // =>
-      // ["after", "all", "any", "bind", "bindAll", "chain", "clone", "collect", "compact", "compose",
-      // "constant", "contains", "countBy", "debounce", "defaults", "defer", "delay", "detect", 
-      // "difference", "drop", "each", "escape", "every", "extend", "filter", "find", "findWhere", 
-      // "first", "flatten", "foldl", "foldr", "forEach", "functions", "groupBy", "has", "head", 
-      // "identity", "include", "indexBy", "indexOf", "initial", "inject", "intersection", "invert", 
-      // "invoke", "isArguments", "isArray", "isBoolean", "isDate", "isElement", "isEmpty", "isEqual", 
-      // "isFinite", "isFunction", "isNaN", "isNull", "isNumber", "isObject", "isRegExp", "isString", 
-      // "isUndefined", "keys", "last", "lastIndexOf", "map", "matches", "max", "memoize", "methods", 
-      // "min", "mixin", "noConflict", "now", "object", "omit", "once", "pairs", "partial", "partition", 
-      // "pick", "pluck", "property", "random", "range", "reduce", "reduceRight", "reject", "rest", 
-      // "result", "sample", "select", "shuffle", "size", "some", "sortBy", "sortedIndex", "tail", 
-      // "take", "tap", "template", "throttle", "times", "toArray", "unescape", "union", "uniq", 
-      // "unique", "uniqueId", "values", "where", "without", "wrap", "zip"]
+      # =>
+      # ["after", "all", "any", "bind", "bindAll", "chain", "clone", "collect", "compact", "compose",
+      # "constant", "contains", "countBy", "debounce", "defaults", "defer", "delay", "detect", 
+      # "difference", "drop", "each", "escape", "every", "extend", "filter", "find", "findWhere", 
+      # "first", "flatten", "foldl", "foldr", "forEach", "functions", "groupBy", "has", "head", 
+      # "identity", "include", "indexBy", "indexOf", "initial", "inject", "intersection", "invert", 
+      # "invoke", "isArguments", "isArray", "isBoolean", "isDate", "isElement", "isEmpty", "isEqual", 
+      # "isFinite", "isFunction", "isNaN", "isNull", "isNumber", "isObject", "isRegExp", "isString", 
+      # "isUndefined", "keys", "last", "lastIndexOf", "map", "matches", "max", "memoize", "methods", 
+      # "min", "mixin", "noConflict", "now", "object", "omit", "once", "pairs", "partial", "partition", 
+      # "pick", "pluck", "property", "random", "range", "reduce", "reduceRight", "reject", "rest", 
+      # "result", "sample", "select", "shuffle", "size", "some", "sortBy", "sortedIndex", "tail", 
+      # "take", "tap", "template", "throttle", "times", "toArray", "unescape", "union", "uniq", 
+      # "unique", "uniqueId", "values", "where", "without", "wrap", "zip"]
       ```
       
       ```ruby
@@ -616,7 +630,7 @@ ary.reverse_each.reduce('') {|memo, num| memo.concat num }
    6. _.extend(destination, *sources),  合并 sources 到 destination, 并返回修改后的 destination.
       
       ```js
-      _.extend({name: 'moe'}, {name: 'larry', age: 30});  // => {name: 'larry', age: 30}
+      _.extend({name: 'moe'}, {name: 'larry', age: 30});  # => {name: 'larry', age: 30}
       ```
       
       ```ruby
@@ -627,7 +641,7 @@ ary.reverse_each.reduce('') {|memo, num| memo.concat num }
    9. _.defaults(object, *defaults), 合并不存在的 defaults 到 object, 返回修改后的 object.
       
       ```
-      _.default({name: 'moe'}, {name: 'larry', age: 30});  // => {name: 'moe', age: 30}
+      _.default({name: 'moe'}, {name: 'larry', age: 30});  # => {name: 'moe', age: 30}
       ```
       
       Ruby 版, 无等价方法, 可以自己写一个.
@@ -644,7 +658,7 @@ ary.reverse_each.reduce('') {|memo, num| memo.concat num }
    7. _.pick(object, *keys)
       
       ```js
-      _.pick({name: 'moe', age: 50, userid: 'moe1'}, 'name', 'age') // => {name:"moe", age:50}
+      _.pick({name: 'moe', age: 50, userid: 'moe1'}, 'name', 'age') # => {name:"moe", age:50}
       ```
       
       ```ruby
@@ -656,7 +670,7 @@ ary.reverse_each.reduce('') {|memo, num| memo.concat num }
    8. _.omit(object, *keys)
 
       ```js
-      _.omit({name: 'moe', age: 50, userid: 'moe1'}, 'userid') // => {name:"moe", age:50}
+      _.omit({name: 'moe', age: 50, userid: 'moe1'}, 'userid') # => {name:"moe", age:50}
       ```
       
       ```ruby
@@ -682,7 +696,7 @@ ary.reverse_each.reduce('') {|memo, num| memo.concat num }
           return greeting + ': ' + this.name
      };
 
-   func.call({name: 'moe'}, 'hi')       // => "hi: moe"
+   func.call({name: 'moe'}, 'hi')       # => "hi: moe"
    ```
 
    ```ruby
@@ -715,7 +729,7 @@ ary.reverse_each.reduce('') {|memo, num| memo.concat num }
         };
 
       new_func = _.bind(func, {name: 'moe'}, 'hi')
-      new_func(); // => "hi: moe"
+      new_func(); # => "hi: moe"
       ```
       
 ## 总结 ##
