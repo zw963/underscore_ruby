@@ -34,7 +34,7 @@ style about *underscore+coffeescript* with *Ruby*
 window.print = (x...)->
   console.log x...
 
-# coffee insert here
+# coffee code input here
 ```
 
 3. open html in your's browser, see console log output for result. (this article use Firefox 40)
@@ -72,7 +72,8 @@ _.each {one: 1, two: 2, three: 3}, (value, key, object)->
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 [1, 2, 3].each_with_index {|e, i| print e, i, ary, "\n" }
 
 # =>  10[1, 2, 3]
@@ -94,6 +95,7 @@ What cause this is ruby use parallel assignment semantic, [:one, 1] correspondin
 
 ```coffee
 ### Coffee Code ###
+
 print _.map [1.0, 2.3, 3], (element)-> Math.cos(element)
 # => Array [ 0.5403023058681398, -0.6662760212798241, -0.9899924966004454 ]
 # Equivalent usage
@@ -105,7 +107,8 @@ print _.map ['XXX', 'YYY', 'XXXX', 'XXXXX'], 'length'
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 ary.map {|x| Math.cos(x) } # => [0.5403023058681398, -0.6662760212798241, -0.9899924966004454]
 # No Equivalent usage
 
@@ -126,7 +129,7 @@ print _.pluck ary, 'name'
 ```
       
 ```ruby
-### Ruby code ###
+### Ruby Code ###
 
 ary = [{name: 'billy', age: 30}, {name: 'zw963', age: 30}, {name: 'wei.zheng', age: 30}]
 ary.map {|e| e[:name] }
@@ -161,7 +164,7 @@ print _.reduceRight ary, (memo, num)->
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
 
 ary = ['1', '2', '3']
 ary.reduce('') {|memo, num| memo.concat num }
@@ -177,7 +180,7 @@ ary.reverse_each.reduce('') {|memo, num| memo.concat num }
 Find the first element match predicate.
 
 ```coffee
-### Coffee code ###
+### Coffee Code ###
 
 ary = [1, 2, 3, 4, 5, 6]
 print _.find ary, (e)-> e % 2 == 0
@@ -186,7 +189,7 @@ print _.find ary, (e)-> e % 2 == 0
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
 
 [1, 2, 3, 4, 5, 6].find {|e| e % 2 == 0 }
 
@@ -195,7 +198,7 @@ print _.find ary, (e)-> e % 2 == 0
 
 ## _.filter/select(list, predicate) _.reject(list, predicate)
 ```coffee
-### Coffee code ###
+### Coffee Code ###
 
 ary = [1, 2, 3, 4, 5, 6]
 
@@ -209,7 +212,7 @@ print _.reject ary, (e) -> e % 2 == 0
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
 
 [1, 2, 3, 4, 5, 6].select {|e| e % 2 == 0 } # => [2, 4, 6], alias find_all
 [1, 2, 3, 4, 5, 6].reject {|e| e % 2 == 0 } # => [1, 3, 5]
@@ -219,7 +222,7 @@ print _.reject ary, (e) -> e % 2 == 0
 When predicate is omit, predicate all element is non-nil, else use predicate.
 
 ```coffee
-### Coffee code ###
+### Coffee Code ###
 
 print _.every [true, 1, null] # => false
 print _.every [true, 1, 'null'] # => true
@@ -227,7 +230,7 @@ print _.every [0, false, "", null, undefined, NaN], (e)-> !e # => true
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
 
 ["", 0].all? # => true
 [nil, false].all? {|e| !e } # => true
@@ -237,7 +240,7 @@ print _.every [0, false, "", null, undefined, NaN], (e)-> !e # => true
 some: When predicate is omit, predicate at least one element is non-nil, else use predicate.
 every: predicate all element is non-nil.
 ```coffee
-### Coffee code ###
+### Coffee Code ###
 
 print _.some [true, 1, null] # => true
 print _.every [true, 1, 'null'] # => true
@@ -245,7 +248,7 @@ print _.every [0, false, "", null, undefined, NaN], (e)-> !e # => true
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
 
 ["", 0].all? # => true
 [nil, false].all? {|e| !e } # => true
@@ -253,20 +256,20 @@ print _.every [0, false, "", null, undefined, NaN], (e)-> !e # => true
 
 ## _.include/contains(list, value) 
 ```coffee
-### Coffee code ###
+### Coffee Code ###
 
 print _.include [1, 2, 3],  3 # => true
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
 
 [1, 2, 3].include? 3 # => true
 ```
 
 ## _.max(list, [iterator], [context]) _.min(list, [iterator], [context]) _.uniq(list, [iterator], [context]) 
 ```coffee
-### Coffee code ###
+### Coffee Code ###
 
 print _.max [1, 2, 3, 4, 5, 6] # => 6
 print _.min [1, 2, 3, 4, 5, 6] # => 1
@@ -277,7 +280,7 @@ print _.uniq [1, -1, 2, -2, 3], Math.abs # => [1, 2, 3]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
 
 [1, 2, 3, 4, 5, 6].max # => 6
 [1, 2, 3, 4, 5, 6].min # => 1
@@ -290,13 +293,14 @@ print _.uniq [1, -1, 2, -2, 3], Math.abs # => [1, 2, 3]
 ## _.sortBy(list, iterator)
 Use a iterator as sort strategy, return sorted list.
 ```coffee
-### Coffee code ###
+### Coffee Code ###
 
 print _.sortBy [1, 2, 3, 4, 5, 6], Math.sin # => [5, 4, 6, 3, 1, 2]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 [1, 2, 3, 4, 5, 6].sort_by {|e| Match.sin(e) }
 ```
 
@@ -304,7 +308,7 @@ print _.sortBy [1, 2, 3, 4, 5, 6], Math.sin # => [5, 4, 6, 3, 1, 2]
 use a iterator as group strategy, return a grouped object, key is return value, value is grouped element list.
 indexBy: key is return value, value is grouped element list last element.
 ```coffee
-### Coffee code ###
+### Coffee Code ###
 
 print _.groupBy(['XXX', 'YYY', 'XXXX', 'XXXXX'], 'length'); # => { 3:["XXX", "YYY"], 4:["XXXX"], 5:["XXXXX"] }
 print _.indexBy(['XXX', 'YYY', 'XXXX', 'XXXXX']), 'length') # => { 3:"YYY", 4:"XXXX", 5:"XXXXX" }
@@ -313,7 +317,8 @@ print _.countBy(['XXX', 'YYY', 'XXXX', 'XXXXX']), 'length') # => { 3:2, 4:1, 5:1
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 ['XXX', 'YYY', 'XXXX', 'XXXXX'].group_by(&:length) # => {3=>["XXX", "YYY"], 4=>["XXXX"], 5=>["XXXXX"]}
 ['XXX', 'YYY', 'XXXX', 'XXXXX'].group_by(&:length).map {|k, v| [k,v.last] }.to_h # => {3=>"YYY", 4=>"XXXX", 5=>"XXXXX"}
 ['XXX', 'YYY', 'XXXX', 'XXXXX'].group_by(&:length).map {|k, v| [k,v.length] }.to_h # => {3=>2, 4=>1, 5=>1}
@@ -322,12 +327,14 @@ print _.countBy(['XXX', 'YYY', 'XXXX', 'XXXXX']), 'length') # => { 3:2, 4:1, 5:1
 ## _.partition(list, predicate)
 paritition a list to two part.
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.partition [0, 1, 2, 3, 4, 5], (num)-> num % 2 # => [[1, 3, 5], [0, 2, 4]]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 [0, 1, 2, 3, 4, 5].partition {|e| e % 2 != 0 } # => [[1, 3, 5], [0, 2, 4]]
 # Equivalent usage
 [0, 1, 2, 3, 4, 5].partition(&:odd?)
@@ -335,7 +342,8 @@ print _.partition [0, 1, 2, 3, 4, 5], (num)-> num % 2 # => [[1, 3, 5], [0, 2, 4]
        
 ## _.shuffle(list) _.sample(list, [n])
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.shuffle [1, 2, 3, 4, 5, 6] # => [2, 4, 6, 5, 1, 3]
 print _.sample [1, 2, 3, 4, 5, 6] # => 4
 print _.sample [1, 2, 3, 4, 5, 6] # => 1
@@ -343,7 +351,8 @@ print _.sample [1, 2, 3, 4], 2 # => [3, 5]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 [1, 2, 3, 4, 5, 6].shuffle # => [2, 5, 1, 3, 6, 4]
 [1, 2, 3, 4, 5, 6].sample # => 1
 [1, 2, 3, 4, 5, 6].sample(2) # => [4, 2]
@@ -351,85 +360,96 @@ print _.sample [1, 2, 3, 4], 2 # => [3, 5]
 
 ## _.size(list)
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.size [1, 2, 3, 4, 5, 6] # => 6
 print _.size {a:100, b:200} # => 2
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 [1, 2, 3, 4, 5, 6].size # => 6
 {a:100, b:200}.size # => 2
 ```
 
 ## _.where/findWhere(list, properties)
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.where [{a:100, b:200}, {c:300, d:400}, {e:500, a:100}], {a: 100} # => [{a:100, b:200}, {e:500, a:100}]
 # findWhere get the first element.
 print _.findWhere [{a:100, b:200}, {c:300, d:400}, {e:500, a: 100}], {a: 100} # => [{a:100, b:200}]
 ```
 
 ```ruby
-### No implement yet. ###
+### Ruby No implement ###
 ```
 
 ## _.toArray(list)
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.toArray(arguments)
 ```
 
 ```ruby
-### No implement yet. ###
+### Ruby No implement. ###
 ```
 
 # Iterator with a Array only (Object is not supported)
 
 ## _.first(list, [n]) _.last(list, [n])
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.first [5, 4, 3, 2, 1], 2 # => [5, 4]
 print _.last [5, 4, 3, 2, 1], 2 # => [2, 1]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 [5, 4, 3, 2, 1].first(2)
 [5, 4, 3, 2, 1].last(2)
 ```
 
 ## _.initial(list, [n])
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.initial [5, 4, 3, 2, 1], 2 # => [5, 4, 3]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 [5, 4, 3, 2, 1][0...-2] # => [5, 4, 3]
 ```
 
 ## _.rest(list, [n])
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.rest [5, 4, 3, 2, 1], 2 # => [3, 2, 1]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 [5, 4, 3, 2, 1].drop(2) # => [3, 2, 1]
 [5, 4, 3, 2, 1][2..-1] # => [3, 2, 1]
 ```
 
 ## _.compact(list)
 ```coffee
-### Coffee code ###
+### Coffee Code ###
 print _.compact [0, 1, false, 2, '', 3];  # => [1, 2, 3]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 [0, false, '', nil].compact  # => [0, false, ''] # only remove nil
 
 ## following is same behavior with _.compact.
@@ -439,25 +459,29 @@ require 'active_support/all'
 
 ## _.flatten(list, [shallow])
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.flatten [1, [2], [3, [4, 5], 6]] # => [1, 2, 3, 4, 5, 6]
 print _.flatten [1, [2], [3, [4, 5], 6]], 1 # => [1, 2, 3, [4, 5], 6]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 [1, [2], [3, [4, 5], 6]].flatten # => [1, 2, 3, 4, 5, 6]
 [1, [2], [3, [4, 5], 6].flatten(1) # => [1, 2, 3, [4, 5], 6]
 ```
 
 ## _.without(list, [shallow])
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.without [1, 2, 1, 0, 3, 1, 4], 0, 1  # => [2, 3, 4]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 ary = [1, 2, 1, 0, 3, 1, 4]
 ary.delete(0)
 ary.delete(1)
@@ -469,14 +493,16 @@ ary.reject {|x| [0, 1].include? x } # => [2, 3, 4]
 
 ## _.union(*arrays) _.intersection(*arrays) _difference(array, *other_arrays)
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.union [1, 2, 3], [101, 2, 1, 10] # => [1, 2, 3, 101, 10]
 print _.intersection [1, 2, 3], [101, 2, 1, 10] # => [1, 2]
 print _.difference [1, 2, 3, 4, 5], [5, 2, 10] # => [1, 3, 4]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 [1, 2, 3] | [101, 2, 1, 10] # => [1, 2, 3, 101, 10]
 [1, 2, 3] & [101, 2, 1, 10] # => [1, 2]
 [1, 2, 3, 4, 5] - [5, 2, 10] # => [1, 3, 4]
@@ -484,7 +510,8 @@ print _.difference [1, 2, 3, 4, 5], [5, 2, 10] # => [1, 3, 4]
 
 ## _.zip(*arrays) _.object(array1, array2)
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.zip ['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]
 # => Array [Array["moe", 30, true], Array["larry", 40, false], Array["curly", 50, false]]
 
@@ -493,7 +520,8 @@ print _.object ['moe', 'larry', 'curly'], [30, 40, 50]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 ['moe', 'larry', 'curly'].zip [30, 40, 50], [true, false, false]
 # => [["moe", 30, true], ["larry", 40, false], ["curly", 50, false]]
 
@@ -503,25 +531,29 @@ print _.object ['moe', 'larry', 'curly'], [30, 40, 50]
 
 ## _.indexOf(array, value) _.lastIndexOf(array, value)
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.indexOf [1, 2, 3, 1, 2, 3], 2; # => 1, return -1 if not exist.
 print _.lastIndexOf [1, 2, 3, 1, 2, 3], 2 # => 4, from right to left.
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 [1, 2, 3, 1, 2, 3].index(2)      # => 1, return nil if not exist.
 [1, 2, 3, 1, 2, 3].rindex(2)     # => 4
 ```
 
 ## _.range([start], stop, [step])
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 print _.range 0, 30, 5 # => [0, 5, 10, 15, 20, 25]
 ```
 
 ```ruby
-### Ruby code ###
+### Ruby Code ###
+
 (0..30).step(5)
 ```
 
@@ -529,14 +561,14 @@ print _.range 0, 30, 5 # => [0, 5, 10, 15, 20, 25]
 return the index which value should be insert into.
        
 ```coffee
-### Coffee code ###
+### Coffee Code ###
+
 _.sortedIndex [10, 20, 30, 40, 50], 35 # => 3
 ```
        
 ```ruby
-Not implement yet, make it.
-
 ### Ruby code ###
+
 class Array
   def sortedIndex(num)
       each_index do |index|
@@ -547,7 +579,7 @@ class Array
   end
 end
 
-or
+or more efficiently
 
 class Array
   def sortedIndex(num)
@@ -556,9 +588,9 @@ class Array
   end
 end
 
-p [-60, 20, 30, 40, 50].sortedIndex(35)  # => 3
-p [-60, 20, 30, 40, 50].sortedIndex(35) {|x| x.abs }# => 2
-p [-60, 20, 30, 40, 50].sortedIndex(35) {|x| x * x }# => nil
+[-60, 20, 30, 40, 50].sortedIndex(35)  # => 3
+[-60, 20, 30, 40, 50].sortedIndex(35) {|x| x.abs }# => 2
+[-60, 20, 30, 40, 50].sortedIndex(35) {|x| x * x }# => nil
 ```
 
 # Iterator with a Object only (Array is not supported)
@@ -567,6 +599,7 @@ p [-60, 20, 30, 40, 50].sortedIndex(35) {|x| x * x }# => nil
       
 ```coffee
 ### Coffee Code ###
+
 _.keys one: 1, two: 2           # => ["one", "two"]
 _.values one: 1, two: 2         # => [1, 2]
 _.pairs one: 1, two: 2          # => [["one", 1], ["two", 2]]
@@ -574,6 +607,7 @@ _.pairs one: 1, two: 2          # => [["one", 1], ["two", 2]]
       
 ```ruby
 ### Ruby Code ###
+
 {one: 1, two: 2}.keys           # => [:one, :two]
 {one: 1, two: 2}.values         # => [1, 2]
 {one: 1, two: 2}.to_a           # => [['one', 1], ['two', 2]]
@@ -582,20 +616,21 @@ _.pairs one: 1, two: 2          # => [["one", 1], ["two", 2]]
 ## _.invert(object)
 ```coffee
 ### Coffee Code ###
+
 _.invert Moe: "Moses", Larry: "Louis"           # => {Moses: "Moe", Louis: "Larry"}
 ```
 
 ```ruby
 ### Ruby Code ###
+
 {Moe: "Moses", Larry: "Louis"}.invert           # => {"Moses" => :Moe, "Louis" => :Larry}
 ```
-
-
 
 ## _.functions/methods(object)
       
 ```coffee
 ### Coffee Code ###
+
 _.functions _
 # =>
   ["after", "all", "any", "bind", "bindAll", "chain", "clone", "collect", "compact", "compose",
@@ -615,6 +650,7 @@ _.functions _
       
 ```ruby
 ### Ruby Code ###
+
 a_object.methods # => [:meth1, meth2 ...]
 ```
 
@@ -622,6 +658,7 @@ a_object.methods # => [:meth1, meth2 ...]
       
 ```coffee
 ### Coffee Code ###
+
 x = {name: 'moe'}
 _.extend x, name: 'larry', age: 30
 print x # => {name: 'larry', age: 30}
@@ -630,6 +667,7 @@ print x # => {name: 'larry', age: 30}
       
 ```ruby
 ### Ruby Code ###
+
 x = {name: 'moe'}
 x.merge! name: 'larry', age: 30
 print x # => {name: 'larry', age: 30}
@@ -643,7 +681,7 @@ _.default x, name: 'larry', age: 30  # => {name: 'moe', age: 30}
 ```
 
 ```ruby
-### Not implement yet.
+### Ruby Code ###
 class Hash
   def defaults(default)
     stripped_default = default.reject {|k, v| include? k }
@@ -656,12 +694,14 @@ end
 
 ```coffee
 ### Coffee Code ###
+
 _.pick {name: 'moe', age: 50, userid: 'moe1'}, 'name', 'age'    # => {name:"moe", age:50}
 _.omit {name: 'moe', age: 50, userid: 'moe1'}, 'userid'         # => {name:"moe", age:50}
 ```
 
 ```ruby
-ruby:
+### Ruby Code ###
+
 {name: 'moe', age: 50, userid: 'moe1'}.assoc(:name), # => only support one argument.
 {name: 'moe', age: 50, userid: 'moe1'}.select {|k,v| k == :name or k == :age }
 {name: 'moe', age: 50, userid: 'moe1'}.reject {|k,v| k == :userid }
@@ -670,18 +710,21 @@ ruby:
 
 ```coffee
 ### Coffee Code ###
+
 _.clone({name: 'moe'});
 ```
 
 ```ruby
 ### Ruby Code ###
+
 {name: 'moe'}.clone
 ```
 
 # Ruby call vs js call, and _.bind(function, object, *arguments)
 
 ```js
-### JS Code ###
+/// JS Code ///
+
 // create a local anonymous function
  var sayHi = function (greeting) {
        return greeting + '! ' + this.name
@@ -701,6 +744,7 @@ print(new_sayHi());                            // => "Hi! moe"
 
 ```coffee
 ### Coffee Code ###
+
 sayHi = (greeting)->
   "#{greeting! @name}"
 
@@ -713,6 +757,8 @@ print new_sayHi()                               # => "hi: moe"
 ```
 
 ```ruby
+### Ruby Code ###
+
 require 'ostruct'
 o = OpenStruct.new(name: 'moe')  # => #<OpenStruct name="moe">
 
