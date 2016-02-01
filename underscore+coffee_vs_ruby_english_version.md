@@ -371,8 +371,7 @@ print _.findWhere [{a:100, b:200}, {c:300, d:400}, {e:500, a: 100}], {a: 100} # 
 ```
 
 ```ruby
-### Ruby code ###
-No implement yet.
+### No implement yet. ###
 ```
 
 ## _.toArray(list)
@@ -382,8 +381,7 @@ print _.toArray(arguments)
 ```
 
 ```ruby
-### Ruby code ###
-(1..10).to_a
+### No implement yet. ###
 ```
 
 # Iterator with a Array only (Object is not supported)
@@ -536,19 +534,25 @@ _.sortedIndex [10, 20, 30, 40, 50], 35 # => 3
 ```
        
 ```ruby
+Not implement yet, make it.
+
 ### Ruby code ###
 class Array
   def sortedIndex(num)
-    if block_given?
-      array = map(&proc).sort
-    else
-      array = self
+      each_index do |index|
+        return index if num <= array[index]
+      end
+      nil
     end
+  end
+end
 
-    array.each_index do |index|
-      return index if num.between?(array[index-1], array[index])
-    end
-    nil
+or
+
+class Array
+  def sortedIndex(num)
+    ele = bsearch {|e| num <= e }
+    index(ele)
   end
 end
 
@@ -556,187 +560,172 @@ p [-60, 20, 30, 40, 50].sortedIndex(35)  # => 3
 p [-60, 20, 30, 40, 50].sortedIndex(35) {|x| x.abs }# => 2
 p [-60, 20, 30, 40, 50].sortedIndex(35) {|x| x * x }# => nil
 ```
+
+# Iterator with a Object only (Array is not supported)
        
-## js 对象函数与 Ruby 哈希函数. ##
+## _.keys(object) _.values(object) _.pairs(object)
+      
+```coffee
+### Coffee Code ###
+_.keys one: 1, two: 2           # => ["one", "two"]
+_.values one: 1, two: 2         # => [1, 2]
+_.pairs one: 1, two: 2          # => [["one", 1], ["two", 2]]
+```
+      
+```ruby
+### Ruby Code ###
+{one: 1, two: 2}.keys           # => [:one, :two]
+{one: 1, two: 2}.values         # => [1, 2]
+{one: 1, two: 2}.to_a           # => [['one', 1], ['two', 2]]
+```
 
-   1. _.keys(object) 
-      
-      ```js
-      _.keys({one: 1, two: 2}); # => ["one", "two"]
-      ```
-      
-      ```ruby
-      Ruby:
-      {one: 1, two: 2}.keys     # => [:one, :two]
-      ```
-      
-   2. _.values(object) 
-      
-      ```js
-      _.values({one: 1, two: 2});  # => [1, 2]
-      ```
-      
-      ```ruby
-      Ruby:
-      {one: 1, two: 2}.values
-      ```
-      
-   3. _.pairs(object)
-      
-      ```js
-      _.pairs({one: 1, two: 2}); # => [["one", 1], ["two", 2]]
-      ```
-      
-      ```ruby
-      Ruby:
-      {one: 1, two: 2}.to_a
-      ```
-      
-   4. _.invert(object), 翻转
-      
-      ```js
-      _.invert({Moe: "Moses", Larry: "Louis"}); # => {Moses: "Moe", Louis: "Larry"}
-      ```
-      
-      ```ruby
-      Ruby:
-      {Moe: "Moses", Larry: "Louis"}  # => {"Moses" => :Moe, "Louis" => :Larry}
-      ```
-   5. _.functions(object) 或别名 _.methods(object), 返回某个对象之上可用的所有方法.
-      
-      ```js
-      _.functions(_); 
-      # =>
-      # ["after", "all", "any", "bind", "bindAll", "chain", "clone", "collect", "compact", "compose",
-      # "constant", "contains", "countBy", "debounce", "defaults", "defer", "delay", "detect", 
-      # "difference", "drop", "each", "escape", "every", "extend", "filter", "find", "findWhere", 
-      # "first", "flatten", "foldl", "foldr", "forEach", "functions", "groupBy", "has", "head", 
-      # "identity", "include", "indexBy", "indexOf", "initial", "inject", "intersection", "invert", 
-      # "invoke", "isArguments", "isArray", "isBoolean", "isDate", "isElement", "isEmpty", "isEqual", 
-      # "isFinite", "isFunction", "isNaN", "isNull", "isNumber", "isObject", "isRegExp", "isString", 
-      # "isUndefined", "keys", "last", "lastIndexOf", "map", "matches", "max", "memoize", "methods", 
-      # "min", "mixin", "noConflict", "now", "object", "omit", "once", "pairs", "partial", "partition", 
-      # "pick", "pluck", "property", "random", "range", "reduce", "reduceRight", "reject", "rest", 
-      # "result", "sample", "select", "shuffle", "size", "some", "sortBy", "sortedIndex", "tail", 
-      # "take", "tap", "template", "throttle", "times", "toArray", "unescape", "union", "uniq", 
-      # "unique", "uniqueId", "values", "where", "without", "wrap", "zip"]
-      ```
-      
-      ```ruby
-      Ruby:
-      object.methods
-      ```
+## _.invert(object)
+```coffee
+### Coffee Code ###
+_.invert Moe: "Moses", Larry: "Louis"           # => {Moses: "Moe", Louis: "Larry"}
+```
 
-   6. _.extend(destination, *sources),  合并 sources 到 destination, 并返回修改后的 destination.
-      
-      ```js
-      _.extend({name: 'moe'}, {name: 'larry', age: 30});  # => {name: 'larry', age: 30}
-      ```
-      
-      ```ruby
-      Ruby:
-      {name: 'moe'}.merge! name: 'larry', age: 30
-      ```
+```ruby
+### Ruby Code ###
+{Moe: "Moses", Larry: "Louis"}.invert           # => {"Moses" => :Moe, "Louis" => :Larry}
+```
 
-   9. _.defaults(object, *defaults), 合并不存在的 defaults 到 object, 返回修改后的 object.
-      
-      ```
-      _.default({name: 'moe'}, {name: 'larry', age: 30});  # => {name: 'moe', age: 30}
-      ```
-      
-      Ruby 版, 无等价方法, 可以自己写一个.
-      ```ruby
-      Ruby:
-      class Hash
-        def defaults(default)
-          stripped_default = default.reject {|k, v| include? k }
-          merge!(stripped_default)
-        end
-      end
-      ```
-      
-   7. _.pick(object, *keys)
-      
-      ```js
-      _.pick({name: 'moe', age: 50, userid: 'moe1'}, 'name', 'age') # => {name:"moe", age:50}
-      ```
-      
-      ```ruby
-      Ruby:
-      {name: 'moe', age: 50, userid: 'moe1'}.assoc(:name), # => 仅支持一个参数.
-      {name: 'moe', age: 50, userid: 'moe1'}.select {|k,v| k == :name or k == :age }
-      ```
 
-   8. _.omit(object, *keys)
 
-      ```js
-      _.omit({name: 'moe', age: 50, userid: 'moe1'}, 'userid') # => {name:"moe", age:50}
-      ```
+## _.functions/methods(object)
       
-      ```ruby
-      Ruby:
-      {name: 'moe', age: 50, userid: 'moe1'}.reject {|k,v| k == :userid }
-      ```
-   10. _.clone(object), 创建对象的浅拷贝.
-       
-       ```js
-       _.clone({name: 'moe'});
-       ```
-       
-       ```ruby
-       Ruby:
-       {name: 'moe'}.clone
-       ```
-       
-## 与函数有关的函数 ##
-   1. Ruby 中的 call 和 js 中的 call.
-   
-   ```js
-    var func = function (greeting) {
-          return greeting + ': ' + this.name
-     };
+```coffee
+### Coffee Code ###
+_.functions _
+# =>
+  ["after", "all", "any", "bind", "bindAll", "chain", "clone", "collect", "compact", "compose",
+  "constant", "contains", "countBy", "debounce", "defaults", "defer", "delay", "detect", 
+  "difference", "drop", "each", "escape", "every", "extend", "filter", "find", "findWhere", 
+  "first", "flatten", "foldl", "foldr", "forEach", "functions", "groupBy", "has", "head", 
+  "identity", "include", "indexBy", "indexOf", "initial", "inject", "intersection", "invert", 
+  "invoke", "isArguments", "isArray", "isBoolean", "isDate", "isElement", "isEmpty", "isEqual", 
+  "isFinite", "isFunction", "isNaN", "isNull", "isNumber", "isObject", "isRegExp", "isString", 
+  "isUndefined", "keys", "last", "lastIndexOf", "map", "matches", "max", "memoize", "methods", 
+  "min", "mixin", "noConflict", "now", "object", "omit", "once", "pairs", "partial", "partition", 
+  "pick", "pluck", "property", "random", "range", "reduce", "reduceRight", "reject", "rest", 
+  "result", "sample", "select", "shuffle", "size", "some", "sortBy", "sortedIndex", "tail", 
+  "take", "tap", "template", "throttle", "times", "toArray", "unescape", "union", "uniq", 
+  "unique", "uniqueId", "values", "where", "without", "wrap", "zip"]
+```
+      
+```ruby
+### Ruby Code ###
+a_object.methods # => [:meth1, meth2 ...]
+```
 
-   func.call({name: 'moe'}, 'hi')       # => "hi: moe"
-   ```
+### _.extend(destination, *sources)
+      
+```coffee
+### Coffee Code ###
+x = {name: 'moe'}
+_.extend x, name: 'larry', age: 30
+print x # => {name: 'larry', age: 30}
 
-   ```ruby
-   # 定义一个方法
-       def func(greeting)
-         greeting + ': ' + name
-       end
-       
-   # 返回这个方法的方法对象. (和 js 不同的是: 这是一个 binding 到 `当前 self' 上的方法对象.)
-   meth_object = method(:func) # => Object#func(greeting)
-   
-   # 模拟一个包含 name 属性的对象.
-   o = Object.new;
-   def o.name; 'moe' end
-   
-   # 将方法对象绑定新的对象 o.
-   new_method_object = meth_object.bind(o)
-   
-   # 调用 call, 方法, 并传入参数.
-   new_method_object.call('hi')   # => 'hi: moe'
-   ```
+```
+      
+```ruby
+### Ruby Code ###
+x = {name: 'moe'}
+x.merge! name: 'larry', age: 30
+print x # => {name: 'larry', age: 30}
+```
 
-   2. _.bind(function, object, *arguments)
-      
-      bind 和 call 唯一的区别是: bind 方法名作为第一个参数传入, 变相的实现了 Ruby 之中的 bind 方法.
-      
-      ```js
-       var func = function (greeting) {
-             return greeting + ': ' + this.name
-        };
+### _.defaults(object, *defaults)
+```coffee
+### Coffee Code ###
+x = {name: 'moe'}
+_.default x, name: 'larry', age: 30  # => {name: 'moe', age: 30}
+```
 
-      new_func = _.bind(func, {name: 'moe'}, 'hi')
-      new_func(); # => "hi: moe"
-      ```
+```ruby
+### Not implement yet.
+class Hash
+  def defaults(default)
+    stripped_default = default.reject {|k, v| include? k }
+    merge!(stripped_default)
+  end
+end
+```
       
-## 总结 ##
-   1. underscore 的第一个参数就是 Ruby 中的 receiver(self), 并在 self 之上调用同名方法.
-      js 之中的 function (x) { ... } 换做 Ruby 之中的 Block, {|x| ... }, 省略 return 就可以了.
-   2. Js 和 Ruby 的 call, 唯一的差别是: 
-      - Js 第一个参数是 this, 其余的参数传递给方法作为参数.
-      - Ruby 单独通过 bind 绑定 self, call 仅接受传递给方法的参数.
-   3. 如果用 Coffee 写 Js, 那就完美了.
-      
+## _.pick(object, *keys) _.omit(object, *keys)
+
+```coffee
+### Coffee Code ###
+_.pick {name: 'moe', age: 50, userid: 'moe1'}, 'name', 'age'    # => {name:"moe", age:50}
+_.omit {name: 'moe', age: 50, userid: 'moe1'}, 'userid'         # => {name:"moe", age:50}
+```
+
+```ruby
+ruby:
+{name: 'moe', age: 50, userid: 'moe1'}.assoc(:name), # => only support one argument.
+{name: 'moe', age: 50, userid: 'moe1'}.select {|k,v| k == :name or k == :age }
+{name: 'moe', age: 50, userid: 'moe1'}.reject {|k,v| k == :userid }
+```
+## _.clone(object), shallow colone
+
+```coffee
+### Coffee Code ###
+_.clone({name: 'moe'});
+```
+
+```ruby
+### Ruby Code ###
+{name: 'moe'}.clone
+```
+
+# Ruby call vs js call, and _.bind(function, object, *arguments)
+
+```js
+### JS Code ###
+// create a local anonymous function
+ var sayHi = function (greeting) {
+       return greeting + '! ' + this.name
+  };
+
+# normally invoke not work.
+print({name: 'moe'}.sayHi('Hi'));               // sayHi is not a function
+
+# with call, it work.
+print(sayHi.call({name: 'moe'}, 'Hi'));         // => "Hi! moe"
+
+# with _.bind, we can create a new local binded funcion which bind this and arguments.
+new_sayHi = _.bind(sayHi, {name: 'moe'}, 'Hi');
+# and defer invoke it.
+print(new_sayHi());                            // => "Hi! moe"
+```
+
+```coffee
+### Coffee Code ###
+sayHi = (greeting)->
+  "#{greeting! @name}"
+
+print {name: 'moe'}.sayHi 'Hi'                  # => sayHi is not a function
+
+print sayHi.call name: 'moe', 'hi'              # => "Hi! moe"
+
+new_sayHi = _.bind sayHi, {name: 'moe'}, 'hi'
+print new_sayHi()                               # => "hi: moe"
+```
+
+```ruby
+require 'ostruct'
+o = OpenStruct.new(name: 'moe')  # => #<OpenStruct name="moe">
+
+def say_hi(greeting)
+  "#{greeting! name}"
+end
+
+# normally invoke work, because top space belong to Object.
+o.say_hi('Hi')
+
+# cat Bound Method Object, and then call with arguments.
+o.method(:say_hi).call('hi')                    # => "Hi! moe"
+
+# get Unbound Method Object, and then bind a object onto, finally call with argument.
+instance_method(:func).bind(o).call('hi')       # => "hi: moe"
+```
