@@ -844,11 +844,12 @@ ready = proc {|k, v| k[:selected] == true and k[:visible] == true }
 readyToGoList = list.select(&:ready)
 ```
 
-## _.clone(object), shallow colone
+## _.clone(object)
 
 ```coffee
 ### Coffee Code ###
 
+# shallow clone
 _.clone({name: 'moe'});
 ```
 
@@ -861,7 +862,7 @@ _.clone({name: 'moe'});
 ## isEqual
 
 ```js
-### JS Code ###
+/// JS Code ///
 
 var stooge = {name: 'moe', luckyNumbers: [13, 27, 34]};
 var clone  = {name: 'moe', luckyNumbers: [13, 27, 34]};
@@ -1240,6 +1241,24 @@ initialize()
 
 # approximately equivalence, only be invoke once.
 BEGIN { createApplication }
+```
+
+## _.throttle(function, wait, [options])
+```coffee
+### Coffee Code ###
+
+# updatePosition at most be invoke 1 time within 100ms.
+throttled = _.throttle(updatePosition, 100);
+$(window).scroll(throttled);
+```
+
+## _.debounce(function, wait, [immediate])
+```coffee
+### Coffee Code ###
+
+# calculateLayout will be invoke only idle time greater than 300ms.
+lazyLayout = _.debounce(calculateLayout, 300);
+$(window).resize(lazyLayout);
 ```
 
 ## _.negate(predicate), return a predicate function negative version.
