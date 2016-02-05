@@ -1,8 +1,9 @@
-# Coffee+underscore vs Ruby
+# Coffee+underscore vs Ruby (underscore.string included)
 
 created by zw963
 
-Original base on http://www.css88.com/doc/underscore/, current support version is 1.8.3
+underscore  base on http://www.css88.com/doc/underscore/, version 1.8.3.
+underscore.string base on http://epeli.github.io/underscore.string, version 3.2.2
 
 The fancy `coffeescript` and `underscore` is written by same one author, so I think
 both should be work well together, this article try to compare the programming
@@ -1357,13 +1358,15 @@ _.now()                 # => 1392066795351
 Time.now.to_i         
 ```
 
-# underscore extension
-
 ## _.mixin(object)
+```coffee
+### Coffee Code ###
+
 _.mixin
   capitalize: (string)->
     string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
 _.chain("fabio").capitalize();        # => "Fabio"
+```
 
 ## _.noConflict()
 ```coffee
@@ -1439,3 +1442,664 @@ here a complete html example:
   </body>
 </html>
 ```
+
+# underscore.string
+
+The first step, you need mixin underscore.string into underscore with:
+```coffee
+### Coffee Code ###
+
+_.mixin s.exports()
+```
+You can use all undrscore.string function with `s.func_name` directly.
+Here we just for unify, all use `_.func_name`.
+
+## capitalize(string, [lowercaseRest=false]) decapitalize(string) => string titleize(string) => string
+
+```coffee
+### Coffee Code ###
+
+print _.capitalize('hello')             # => 'Hello'
+print _.capitalize('heLLo')             # => 'HeLLo'
+print _.capitalize('heLLo', true)       # => 'Hello'
+
+print _.decapitalize("Foo Bar")         # => 'foo Bar'
+print _.titleize('my name is epeli')    # => "My Name Is Epeli"
+```
+
+```ruby
+### Ruby Code ###
+
+# same as _.capitalize('string', true)
+'hello world'.capitalize                        # => 'Hello world'
+'heLLo'.capitalize                              # => 'Hello'
+
+'Foo Bar'.downcase                              # => 'foo bar'
+'Foo Bar'.sub(/^./) {|match| match.downcase }   # => 'foo Bar'
+require 'active_support/all'
+'my name is epeli'.capitalize                   # => 'My Name Is Epeli'
+```
+
+## camelize(string, [decapitalize=false]) => string
+```coffee
+### Coffee Code ###
+
+_.camelize('moz-transform')                     # => 'mozTransform'
+# if start with _ or -, first char upcase.
+_.camelize('-moz-transform')                    # => 'MozTransform'
+_.camelize('_moz_transform')                    # => 'MozTransform'
+
+_.camelize('Moz-transform')                     # => 'MozTransform'
+
+# can be force first char downcase.
+_.camelize('-moz-transform', true)              # => 'mozTransform'
+```
+
+```ruby
+### Ruby Code ###
+
+require 'active_support/all'
+
+# ruby camelize not support '-' transformation.
+'moz-transform'.camelize                        # => 'Moz-transform'
+'moz_transform'.camelize                        # => 'MozTransform'
+```
+
+## classify(string) => string
+```coffee
+### Coffee Code ###
+
+classify('some_class_name')                     # => 'SomeClassName'
+```
+
+```ruby
+### Ruby Code ###
+
+require 'active_support/all'
+
+# Ruby on Rails classify exist special specification.
+'some_class_names'.classify                     # => 'SomeClassName'
+'some_folder/some_class_names'.classify         # => "SomeFolder::SomeClassName"
+
+'some_class_name'.camelize                      # => 'SomeClassName'
+```
+
+## underscored(string) => string dasherize(string) => string humanize(string) => string
+```coffee
+### Coffee Code ###
+
+# NOTICE: here is underscored, not underscore.
+_.underscored('MozTransform');                                  # => 'moz_transform'
+_.dasherize('MozTransform')                                     # => '-moz-transformn'
+_.humanize("  capitalize dash-CamelCase_underscore trim  ")     # => 'Capitalize dash camel case underscore trim'
+
+```
+
+```ruby
+### Ruby Code ###
+
+require 'active_support/all'
+'MozTransform'.underscore                               # => 'moz_transform'
+# ruby dasherize only worked with _
+'moz_transform'.dasherize                               # => moz-transform
+
+'  capitalize dash-CamelCase_underscore trim  '.strip.humanize
+# => "Capitalize dash-camelcase underscore trim"
+```
+
+## swapCase(string) => string
+```coffee
+### Coffee Code ###
+
+_.swapCase('hELLO')                             # => 'Hello'
+```
+
+```ruby
+### Ruby Code ###
+
+'hELLO'.swapcase                                # => 'Hello'
+```
+
+
+## chars(string) => array
+```coffee
+### Coffee Code ###
+
+_.chars('Hello')                # => ['H', 'e', 'l', 'l', 'o']
+```
+
+```ruby
+### Ruby Code ###
+
+'Hello'.chars                   # => # => ['H', 'e', 'l', 'l', 'o']
+```
+
+## chop(string, step) => array
+```coffee
+### Coffee Code ###
+
+print _.chop("whitespace", 3)                   # => ["whi", "tes", "pac", "e"]
+```
+
+```ruby
+### Ruby Code ###
+
+"whitespace".chars.each_slice(3).map(&:join)    # => ["whi", "tes", "pac", "e"]
+```
+
+## clean(string) => string 
+```coffee
+### Coffee Code ###
+
+_.clean('  hello   world  ')                    # => 'hello world'
+
+```
+
+```ruby
+### Ruby Code ###
+
+# Ruby standard libary strip not squish space between string.
+'  hello   world  '.strip                       # => "hello   world"
+
+
+'  hello   world  '.strip.squeeze(' ')          # => "hello world"
+# or use active support
+require 'active_support/all'
+'  hello   world  '.squish                      # => 'hello world'
+```
+
+## cleanDiacritics(string) => string
+```coffee
+### Coffee Code ###
+
+_.cleanDiacritics('ääkkönen')                   # => 'aakkonen'
+```
+
+## include(string, substring) => boolean
+```coffee
+### Coffee Code ###
+
+_.include('foobar', 'ob')                       # => true
+```
+
+```ruby
+### Ruby Code ###
+
+'foobar'.include? 'ob'                          # => true
+```
+
+## count(string, substring) => number
+```coffee
+### Coffee Code ###
+
+_.count('foobar', 'o')                          # => 2
+```
+
+```ruby
+### Ruby Code ###
+
+'foobar'.count('o')                             # => 2
+```
+
+## escapeHTML(string) => string unescapeHTML(string) => string
+```coffee
+### Coffee Code ###
+
+_.escapeHTML('<div>Blah blah blah</div>')                       # => '&lt;div&gt;Blah blah blah&lt;/div&gt;'
+_.unescapeHTML('&lt;div&gt;Blah&nbsp;blah blah&lt;/div&gt;');   # => '<div>Blah blah blah</div>'
+// => 
+
+```
+
+```ruby
+### Ruby Code ###
+
+CGI.escapeHTML('<div>Blah blah blah</div>')                     # => '&lt;div&gt;Blah blah blah&lt;/div&gt;'
+CGI.escapeHTML('&lt;div&gt;Blah blah blah&lt;/div&gt;')         # => '<div>Blah blah blah</div>'
+```
+
+## insert(string, index, substring) => string
+```coffee
+### Coffee Code ###
+
+_.insert("Hello ", 6, "world"); # => 'hello world'
+```
+
+```ruby
+### Ruby Code ###
+
+'Hello '.insert(6, 'world')
+```
+
+## replaceAll(string, find, replace, [ignorecase=false]) => string
+```coffee
+### Coffee Code ###
+
+_.replaceAll('foo', 'o', 'a')           # => 'faa'
+```
+
+```ruby
+### Ruby Code ###
+
+"foo'.gsub 'o', 'a'                     # => 'faa'
+```
+
+## isBlank(string) => boolean
+```coffee
+### Coffee Code ###
+
+# HTML black semantic. 
+print _.isBlank([])                     # => true
+print _.isBlank('   ')                  # => true
+print _.isBlank(null)                   # => true
+# any number return false.
+print _.isBlank(0)                      # => false
+
+print _.isBlank({})                     # => false
+```
+
+```ruby
+### Ruby Code ###
+
+require 'active_support/all'
+[].blank?                               # => true
+'   '.blank?                            # => true
+nil.blank?                              # => true
+false.blank?                            # => true
+0.blank?                                # => false
+
+{}.blank?                               # => true
+```
+
+## join(separator, ...strings) => string
+```coffee
+### Coffee Code ###
+
+print _.join(' ', 'foo', 'bar'); # => 'foo bar'
+```
+
+```ruby
+### Ruby Code ###
+
+['foo', 'bar'].join(' ')        # => 'foo bar'
+```
+
+## lines(str) => array
+```coffee
+### Coffee Code ###
+
+print _.lines("Hello\nWorld")           # => ['Hello', 'World']
+```
+
+```ruby
+### Ruby Code ###
+
+"Hello\nWorld".lines                    # => ["Hello\n", 'World']
+"Hello\nWorld".split("\n")              # => ['Hello', 'World']
+```
+
+## wrap(str, options) => string
+```coffee
+### Coffee Code ###
+
+print _.wrap 'Hello World',  width:5             # => "Hello\nWorld"
+```
+
+```ruby
+### Ruby Code ###
+
+# following code stolen from Ruby on Rails `action_view/helpers/text_helper.rb`
+def word_wrap(text, options = {})
+  # default is 80
+  line_width = options.fetch(:line_width, 80)
+
+  text.split("\n").collect! do |line|
+    line.length > line_width ? line.gsub(/(.{1,#{line_width}})(\s+|$)/, "\\1\n").strip : line
+  end * "\n"
+end
+word_wrap('Hello World', line_width: 5)
+```
+
+## dedent(str, [pattern]) => string
+```coffee
+### Coffee Code ###
+
+print _.dedent("\tHello\n\tWorld")                  # => "Hello\n\tWorld"
+print _.dedent("   Hello\n\tWorld")                  # => "Hello\n\tWorld"
+print _.dedent("\tHello\n\tWorld\t")                  # => "Hello\n\tWorld\t"
+```
+
+```ruby
+### Ruby Code ###
+
+"\tHello\n\tWorld".lstrip                       # => "Hello\n\tWorld"
+```
+
+## reverse(string) => string
+```coffee
+### Coffee Code ###
+
+print _.reverse('foobar')                       # => 'raboof'
+```
+
+```ruby
+### Ruby Code ###
+
+'foobar'.reverse                                # => 'raboof'
+```
+
+## splice(string, index, howmany, substring) => string
+```coffee
+### Coffee Code ###
+
+print _.splice 'https://edtsech@bitbucket.org/edtsech/underscore.strings', 30, 7, 'epeli'
+# => "https://edtsech@bitbucket.org/epeli/underscore.strings"
+```
+
+```ruby
+### Ruby Code ###
+
+x = 'https://edtsech@bitbucket.org/edtsech/underscore.strings'
+x[30, 7] = 'epeli'
+x
+```
+
+## startsWith(string, starts, [position=0]) => boolean endsWith(string, ends, [position]) => boolean
+```coffee
+### Coffee Code ###
+
+_.startsWith('image.gif', 'image')              # => true
+_.startsWith('.vimrc', 'vim', 1)                # => true
+_.endsWith('image.gif', 'gif')                  # => true
+```
+
+```ruby
+### Ruby Code ###
+
+'image.gif'.start_with?('image')                # => true
+# match any one will return true.
+'image.gif'.end_with?('bmp', 'gif')             # => true
+```
+
+## succ(string) => string pred(string) => string
+```coffee
+### Coffee Code ###
+
+_.succ('a')                                     # => 'b'
+_.pred("b")                                     # => 'a'
+```
+
+```ruby
+### Ruby Code ###
+
+'a'.succ                                        # => 'b'
+# Ruby pred not implement.
+```
+
+
+## strip/lstrip/rstrip(string, [characters]) => string
+```coffee
+### Coffee Code ###
+
+_.strip('  foobar   ');                          # => 'foolbar'
+_.strip('_-foobar-_', '_-')                      # => 'foobar'
+
+_.lstrip('  foobar')                             # => 'foobar'
+_.rstrip('foobar   ')                            # => 'foobar'
+```
+
+```ruby
+### Ruby Code ###
+
+'  foobar   '.strip                             # => 'foobar'
+'  foobar'.lstrip                               # => 'foobar'
+'foobar  '.rstrip                               # => 'foobar'
+'_-foobar-_'.tr('_-', '')                       # => 'foobar'
+```
+
+## stripTags(string) => string
+```coffee
+### Coffee Code ###
+
+_.stripTags("a <a href=\"#\">link</a>");          # => "a link"
+
+```
+
+```ruby
+### Ruby Code ###
+
+# Ruby on Rails ActionView::Helpers::SanitizeHelper exit this method.
+strip_tags("Strip <i>these</i> tags!")          # => Strip these tags!
+```
+
+## truncate(string, length, [truncateString = '...']) prune(string, length, pruneString)
+```coffee
+### Coffee Code ###
+
+truncate("Hello world", 5)                      # => "Hello..."
+
+# prune make sure pruned string does not exceed the original length.
+prune("Hello, world", 5);                       # => 'Hello...'
+prune("Hello, world", 5, " (read a lot more)"); # => 'Hello World'
+```
+
+```ruby
+### Ruby Code ###
+
+require 'active_support/all'
+# truncated string length take `...` into count.
+'Hello World'.truncate(5)                       # => 'He...'
+'Hello World'.truncate(8)                       # => 'Hello...'
+```
+
+## words(str, delimiter=/\s+/) => array
+```coffee
+### Coffee Code ###
+
+_.words('   I   love   you   ')                 # => ['I', 'love', 'you']
+_.words('I_love_you', '_')                      # => ['I', 'love', 'you']
+_.words('I_love-you', /[-_]/)                   # => ['I', 'love', 'you']
+```
+
+```ruby
+### Ruby Code ###
+
+"   I   love   you   ".split(' ')               # => ['I', 'love', 'you']
+'I_love_you'.split('_')                         # => ['I', 'love', 'you']
+'I_love-you'.split(/[-_]/)                      # => ['I', 'love', 'you']
+```
+
+## sprintf(string format, ...arguments) => string
+```coffee
+### Coffee Code ###
+
+sprintf("%.1f", 1.17)                           # => 1.2
+```
+
+```ruby
+### Ruby Code ###
+
+sprintf("%.1f", 1.17)                           # => 1.2
+```
+
+## rjust/ljust/center(str, length, [padStr, type]) => string 
+```coffee
+### Coffee Code ###
+
+_.rjust("1", 8)                                    # => "       1"
+_.rjust("1", 8, "0")                               # => "00000001", alias for pad, rjust
+_.ljust("1", 8, "0");                              # => "10000000", alias for pad("1", 8, "0", "right")
+_.center('1', '8', '0')                            # => "00001000", alias for pad("1", 8, "0", "both")
+```
+
+```ruby
+### Ruby Code ###
+
+'1'.rjust(8)                                    # => "        1"
+'1'.ljust(8, '0')                               # => "100000000"
+'1'.center(8, '0')                              # => '00010000'
+```
+
+## toNumber(string, [decimals]) => number
+```coffee
+### Coffee Code ###
+
+toNumber("2.556")                               # => 3
+toNumber("2.556", 1);                           # => 2.6
+```
+
+```ruby
+### Ruby Code ###
+
+"2.556".to_f.round                              # => 3
+ "%.1f" % "2.556"                               # => 2.6, % presentation same as sprintf
+```
+  
+## strRight/strRightBack/strLeft/strLeftBack(string, pattern) => string
+```coffee
+### Coffee Code ###
+
+strRight("This_is_a_test_string", "_");         # => "is_a_test_string"
+strLeft("This_is_a_test_string", "_");          # => "This";
+strRightBack("This_is_a_test_string", "_");     # => "string"
+strLeftBack("This_is_a_test_string", "_");      # => "This_is_a_test";
+```
+
+```ruby
+### Ruby Code ###
+
+'This_is_a_test_string'.slice(/_(.*)/, 1)       # => 'is_a_test_string'
+'This_is_a_test_string'.slice(/(.*?)_/, 1)      # => "This'
+'This_is_a_test_string'.slice(/.*_(.*)/, 1)     # => 'string'
+'This_is_a_test_string'.slice(/(.*)_/, 1)       # => 'This_is_a_test'
+```
+
+## toSentence(array, [delimiter, lastDelimiter]) => string
+```coffee
+### Coffee Code ###
+
+_.toSentence(["jQuery", "Mootools", "Prototype"]);      # => "jQuery, Mootools and Prototype"
+```
+
+```ruby
+### Ruby Code ###
+
+require 'active_support/all'
+['one', 'two', 'three'].to_sentence # => "one, two, and three"
+```
+
+## repeat(string, count, [separator])
+```coffee
+### Coffee Code ###
+
+print _.repeat("foo", 3);                             # => "foofoofoo"
+print _.repeat("foo", 3, "-")                           # => "foo-foo-foo"
+```
+
+```ruby
+### Ruby Code ###
+
+"foo"*3                                                 # => "foofoofoo"
+Array.new(3, 'foo').join('-')                           # => "foo-foo-foo"
+```
+
+## surround(string, wrap) => string
+```coffee
+### Coffee Code ###
+
+_.surround('foo', '**');                                # => '**foo**'
+'foo'.sub(/.*/, '**\&**')                               # => '**foo**'
+
+## q(string, quoteChar="\"") => string unquote(string, quoteChar) => string
+```coffee
+### Coffee Code ###
+
+quote("foo", '"')                                       # => "\"foo\""
+unquote('"foo"');                                       # => "foo"
+unquote("'foo'", "'")                                   # => "foo"
+```
+
+```ruby
+### Ruby Code ###
+
+"foo".sub(/.*/, '"\&"')                                 # => "\"foo\""
+"\"foo\"".slice(/"(.*)"/, 1)                            # => "foo"
+```
+
+## naturalCmp(string1, string2) => number
+```coffee
+### Coffee Code ###
+
+["foo20", "foo5"].sort(naturalCmp);                     # => ["foo5", "foo20"]
+```
+
+```ruby
+### Ruby Code ###
+def natural_cmp(str1, str2)
+  ary1 = str1.split(/(?<=[a-zA-Z])(?=\d)/)
+  ary2 = str2.split(/(?<=[a-zA-Z])(?=\d)/)
+  [ary1[0], ary1[1].to_i] <=> [ary2[0], ary2[1].to_i]
+end
+
+["foo20", "foo5"].sort {|x, y| nautral_comp(x, y) }     # => ["foo5", "foo20"]
+
+class String
+  def natural_cmp
+    ary = self.split(/(?<=[a-zA-Z])(?=\d)/)
+    [ary[0], ary[1].to_i]
+  end
+
+  def natural_cmp1
+  end
+end
+
+["foo20", "foo5"].sort_by(&:natural_cmp)                # => ["foo5", "foo20"]
+```
+
+## toBoolean(string) => boolean
+```coffee
+### Coffee Code ###
+
+_.toBoolean("true")                                       # => true
+_.toBoolean("FALSE")                                      # => false
+``
+
+```ruby
+### Ruby Code ###
+
+JSON.load('true')                                       # => true
+JSON.load('false')                                      # => false
+```
+
+## levenshtein(string1, string2) => number
+```coffee
+### Coffee Code ###
+
+# Levenshtein distance.
+_.levenshtein("kitten", "kittah")                 # => 2
+```
+
+```ruby
+### Ruby Code ###
+
+require 'rubygems/text'
+include Gem::Text
+levenshtein_distance('hello', 'hi')             # => 5
+```
+
+# slugify(string) => string
+```coffee
+### Coffee Code ###
+
+slugify("Un éléphant à l\'orée du bois")                #  => "un-elephant-a-l-oree-du-bois"
+```
+
+## numberFormat(number, [ decimals=0, decimalSeparator='.', orderSeparator=',']) => string
+```coffee
+### Coffee Code ###
+
+_.numberFormat 1000, 2                          # => 1000.00
+_.numberFormat 123456789.123, 5, '.', ', '      # => 123,456,789.12300
+```
+
+# 记得看下 word_wrap 的实现。
